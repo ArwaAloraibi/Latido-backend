@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const userSchema = mongoose.Schema({
-  username: {
+const albumSchema = mongoose.Schema({
+  name: {
     type: String,
     require: true,
   },
@@ -23,6 +23,6 @@ userSchema.set('toJSON', {
   },
 });
 
-const User = mongoose.model('User', userSchema);
+const Album = mongoose.model('Album', albumSchema);
 
-module.exports = User;
+module.exports = Album;
