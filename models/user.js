@@ -12,9 +12,19 @@ const userSchema = mongoose.Schema({
   pfp: {
     type: String,
   },
-  isArtist: {
-    type: Boolean,
-  }
+  roles: {
+    type: String,
+    enum:['listiner', 'artist'],
+    required: true,
+  },
+  albums: {
+    type:mongoose.Schema.Types.ObjectId, ref: 'album'
+  },
+  
+  playlists: {
+    type:mongoose.Schema.Types.ObjectId, ref: 'plsylist' 
+},
+
 });
 
 userSchema.set('toJSON', {
