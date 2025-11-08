@@ -1,32 +1,28 @@
 
+const mongoose = require('mongoose');
+
 const albumSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
- 
     },
     coverImg: {
-        type:true,
+        type: String,
     },
-      albumId:{
-     type: mongoose.Schema.Types.ObjectId, 
-     ref: 'album'
-
-      },
-      song:{
-        type:mongoose.Schema
-.Types.ObjectId, ref: 'Song'
-      }
-
+    albumId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Album',
+    },
+    song: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Song',
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
-});
+}, { timestamps: true });
 
+const Album = mongoose.model('Album', albumSchema);
 
-const song = mongoose.model("album", albumSchema);
-
-
-
-module.exports = album;
+module.exports = Album;
