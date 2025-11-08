@@ -9,6 +9,22 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  pfp: {
+    type: String,
+  },
+  roles: {
+    type: String,
+    enum:['listiner', 'artist'],
+    required: true,
+  },
+  albums: {
+    type:mongoose.Schema.Types.ObjectId, ref: 'album'
+  },
+  
+  playlists: {
+    type:mongoose.Schema.Types.ObjectId, ref: 'plsylist' 
+},
+
 });
 
 userSchema.set('toJSON', {
