@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 
 router.get('/current-user', async (req, res) => {
   try {
-    // Get a list of all users, but only return their username and _id
+    // Get a list of all currently logged in users, but only return their username and _id
     const user = await User.findById(req.user._id);
 
     res.json(user);
@@ -28,7 +28,7 @@ router.get('/current-user', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    // Get a list of all users, but only return their username and _id
+    // Get user by id
     const user = await User.findById(req.params.id);
 
     res.json(user);
