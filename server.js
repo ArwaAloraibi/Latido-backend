@@ -35,6 +35,8 @@ app.use('/test-jwt', testJwtRouter);
 // Protected Routes
 app.use(verifyToken);
 app.use('/users', usersCtrl);
+app.use('/album', albumCtrl);
+
 
 app.listen(PORT, () => {
   console.log('The express app is ready!');
