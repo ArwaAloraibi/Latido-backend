@@ -65,32 +65,18 @@ router.post('/', async (req, res) => {
 
 
 
+// show songs inside a spesific  album
+router.get('/:albumId', async (req, res) => {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // show songs inside a spesific  album
-// router.get('/:albumId', async (req, res) => {
-
-//     try {
-//     const album = await Album.findById(req.params.albumId).populate('songs');
-//     if (!album) return res.status(404).json({ err: 'Album not found' });
-//     res.json(album.songs);
-//   } catch (err) {
-//     res.status(500).json({ err: err.message });
-//   }
+    try {
+    const album = await Album.findById(req.params.albumId).populate('songs');
+    if (!album) return res.status(404).json({ err: 'Album not found' });
+    res.json(album.songs);
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
   
-// });
+});
 
 // // edit the album
 // router.get('/:albumId/edit', async (req, res) => {
