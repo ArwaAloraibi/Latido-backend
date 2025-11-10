@@ -78,29 +78,51 @@ router.get('/:albumId', async (req, res) => {
   
 });
 
-// // edit the album
-// router.get('/:albumId/edit', async (req, res) => {
+// edit the album
+router.get('/:albumId/edit', async (req, res) => {
 
-//   const album = await Album.findById(req.params.albumId);
-//   res.json({ message: 'Render edit album form', album });
-  
-// });
+  try {
+    const album = await Album.findById(req.params.albumId).populate('songs');
+    if (!album) return res.status(404).json({ err: 'Album not found' });
 
-// // update the album
-// router.put('/:albumId', async (req, res) => {
+  res.json({ message: 'Render edit album form', album });
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+});
 
-//    try {
-//     const album = await Album.findByIdAndUpdate(
-//       req.params.albumId,
-//       req.body,
-//       { new: true }
-//     );
-//     res.json(album);
-//   } catch (err) {
-//     res.status(500).json({ err: err.message });
-//   }
+// update the album
+router.put('/:albumId', async (req, res) => {
 
-// });
+   try {
+    const { name, songs } = req.body;
+    const album = await Album.findByIdAndUpdate(
+      req.params.albumId,
+      { name },
+      { new: true }
+     ).populate('songs'); 
+    if (!album) return res.status(404).json({ err: 'Album not found' });
+      // If songs provided, add new songs to album
+    if (Array.isArray(songs) && songs.length > 0) {
+      const songDocsData = songs.map(songData => {
+        if (typeof songData === 'string') {
+          return { name: songData, album: album._id, artist: req.user._id };
+        }
+        return Object.assign({}, songData, { album: album._id, artist: req.user._id });
+      });
+
+      const createdSongs = await Song.insertMany(songDocsData);
+       album.songs = createdSongs.map(s => s._id);
+       await album.save();
+    }
+
+    res.json(album);
+
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+
+});
 
 // // delete the album
 // router.delete('/:albumId', async (req, res) => {
