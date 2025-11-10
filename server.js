@@ -14,6 +14,7 @@ const testJwtRouter = require('./controllers/test-jwt');
 const authCtrl = require('./controllers/auth');
 const usersCtrl = require('./controllers/users');
 const playlistRoutes = require('./controllers/playlists');
+const albumsCtrl = require('./controllers/albums');
 
 // MiddleWare
 const verifyToken = require('./middleware/verify-token');
@@ -36,6 +37,7 @@ app.use('/test-jwt', testJwtRouter);
 app.use(verifyToken);
 app.use('/users', usersCtrl);
 app.use('/playlists', playlistRoutes);
+app.use('/albums', albumsCtrl);
 
 app.listen(PORT, () => {
   console.log('The express app is ready!');
