@@ -124,24 +124,24 @@ router.put('/:albumId', async (req, res) => {
 
 });
 
-// // delete the album
-// router.delete('/:albumId', async (req, res) => {
+// delete the album
+router.delete('/:albumId', async (req, res) => {
      
-//     try {
-//     const album = await Album.findByIdAndDelete(req.params.albumId);
-//     if (!album) return res.status(404).json({ err: 'Album not found' });
+    try {
+    const album = await Album.findByIdAndDelete(req.params.albumId);
+    if (!album) return res.status(404).json({ err: 'Album not found' });
 
-//     // Remove album reference from user
-//     await User.findByIdAndUpdate(req.user._id, {
-//       $pull: { albums: album._id }
-//     });
+    // Remove album reference from user
+    await User.findByIdAndUpdate(req.user._id, {
+      $pull: { albums: album._id }
+    });
 
-//     res.json({ message: 'Album deleted' });
-//   } catch (err) {
-//     res.status(500).json({ err: err.message });
-//   }
+    res.json({ message: 'Album deleted' });
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
   
-// });
+});
 
 
 module.exports = router;
