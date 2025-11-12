@@ -13,11 +13,11 @@ const songSchema = new mongoose.Schema({
     coverImg: {
         type: String,
     },
-    albumId: {
+    album: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Album',
     },
-    userId: {
+    artist: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
