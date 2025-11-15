@@ -1,18 +1,52 @@
 const express = require('express');
 const router = express.Router();
 const Playlist = require('../models/playlist');
+const Song = require('../models/song'); 
+const User = require('../models/user'); 
 
-// Create a new playlist
+
+// Create a new playlist with songs
 router.post('/', async (req, res) => {
   try {
     const { user_id, songs, name, totalDuration } = req.body;
-    const playlist = new Playlist({ playlist_id: new Playlist()._id, user_id, songs, name, totalDuration });
-    await playlist.save();
-    res.status(201).json(playlist);
+    // Create new playlist without songs initially
+    const newPlaylist = new Playlist({ user_id, name, totalDuration });
+    await newPlaylist.save();
+
+    if (Array.isArray(songs) && songs.length > 0) {
+      // Normalize song input: accept array of strings (titles) or array of objects
+      const songDocsData = songs.map(songData => {
+        if (typeof songData === 'string') {
+          return { name: songData, playlist: newPlaylist._id, artist: user_id };
+        }
+        // assume object
+        return Object.assign({}, songData, { playlist: newPlaylist._id, artist: user_id });
+      });
+
+      // Bulk insert songs
+      const createdSongs = await Song.insertMany(songDocsData);
+
+      // Attach song ids to playlist and save
+      newPlaylist.songs = createdSongs.map(s => s._id);
+      await newPlaylist.save();
+    }
+
+    // Add playlist to user's playlists array
+    const user = await User.findById(user_id);
+    if (user) {
+      user.playlists.push(newPlaylist._id);
+      await user.save();
+    }
+
+    // Populate songs for response
+    const populated = await Playlist.findById(newPlaylist._id).populate('songs').populate('user_id');
+
+    res.status(201).json(populated);
   } catch (err) {
-    res.status(500).json({ err: 'Failed to create playlist' });
+    res.status(500).json({ err: err.message });
   }
 });
+
 
 // Get all playlists, including populated user and songs info
 router.get('/', async (req, res) => {
@@ -23,6 +57,7 @@ router.get('/', async (req, res) => {
     res.status(500).json({ err: 'Failed to fetch playlists' });
   }
 });
+
 
 // Get a specific playlist by its ID, with populated user and songs
 router.get('/:id', async (req, res) => {
@@ -35,6 +70,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+
 // Update an existing playlist by its ID
 router.put('/:id', async (req, res) => {
   try {
@@ -46,6 +82,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+
 // Delete a playlist by its ID
 router.delete('/:id', async (req, res) => {
   try {
@@ -56,5 +93,6 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ err: 'Failed to delete playlist' });
   }
 });
+
 
 module.exports = router;
