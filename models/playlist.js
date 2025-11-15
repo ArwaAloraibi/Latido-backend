@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
 
 const playlistSchema = mongoose.Schema({
-  playlist_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
-  user_id: {
+  listener: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
