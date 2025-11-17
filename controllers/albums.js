@@ -9,7 +9,12 @@ const path = require('path');
 // show all albums
 router.get('/', async (req, res) => {
   try {
-    const albums = await Album.find().populate('songs').populate('userId', 'username');
+    const albums = await Album.find()
+      .populate({
+        path: 'songs',
+        populate: { path: 'artist', select: 'username' }
+      })
+      .populate('userId', 'username');
     res.json(albums);
   } catch (err) {
     res.status(500).json({ err: err.message });
