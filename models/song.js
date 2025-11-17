@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 
 const songSchema = new mongoose.Schema({
@@ -13,15 +12,17 @@ const songSchema = new mongoose.Schema({
     coverImg: {
         type: String,
     },
-    albumId: {
+    audioUrl: {
+        type: String,
+    },
+    album: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Album',
     },
-    userId: {
+    artist: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
-
 });
 
 const Song = mongoose.model('Song', songSchema);

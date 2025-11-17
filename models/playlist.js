@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
 
 const playlistSchema = mongoose.Schema({
-  playlist_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
-  user_id: {
+  listener: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
@@ -23,6 +19,9 @@ const playlistSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
+  coverImg: {
+    type: String,
+  },
 });
 
 playlistSchema.set('toJSON', {
@@ -34,4 +33,3 @@ playlistSchema.set('toJSON', {
 const Playlist = mongoose.model('Playlist', playlistSchema);
 
 module.exports = Playlist;
-

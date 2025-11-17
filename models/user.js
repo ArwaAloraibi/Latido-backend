@@ -14,16 +14,16 @@ const userSchema = mongoose.Schema({
   },
   roles: {
     type: String,
-    enum:['listiner', 'artist'],
-    required: true,
+    enum:['listener', 'artist'],
+    required: true
   },
-  albums: {
+  albums: [{
     type:mongoose.Schema.Types.ObjectId, ref: 'album'
-  },
+  }],
   
-  playlists: {
-    type:mongoose.Schema.Types.ObjectId, ref: 'plsylist' 
-},
+  playlists: [{
+    type:mongoose.Schema.Types.ObjectId, ref: 'playlist' 
+}],
 
 });
 

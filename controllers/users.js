@@ -37,4 +37,41 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.get('/:id/features', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json(
+      { 
+        err: 'User not found' 
+      }
+    );
+
+    let availableFeatures = [];
+
+    if (user.role === 'artist') {
+      availableFeatures = 
+      [
+        'create_album',
+        'edit_album',
+        'delete_album',
+        'add_song_to_album',
+        'edit_song_in_album',
+        'delete_song_from_album'
+      ];
+    } else {
+      availableFeatures = 
+      [
+        'create_playlist',
+        'add_song_to_playlist',
+        'edit_playlist',
+        'delete_playlist'
+      ];
+    }
+
+    res.json({ role: user.role, availableFeatures });
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+});
+
 module.exports = router;
