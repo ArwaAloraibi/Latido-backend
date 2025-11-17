@@ -15,7 +15,7 @@ const userSchema = mongoose.Schema({
   roles: {
     type: String,
     enum:['listener', 'artist'],
-    required: true,
+    required: true
   },
   albums: [{
     type:mongoose.Schema.Types.ObjectId, ref: 'album'
